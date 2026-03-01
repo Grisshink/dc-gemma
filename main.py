@@ -53,11 +53,14 @@ def gen_response(text: str, chat_id: int, img: str | None) -> str:
             stream=True,
         )
     except requests.exceptions.ConnectionError:
+        llama_context[chat_id].pop()
         return '!! Апи отключён !!'
     except requests.exceptions.ReadTimeout:
+        llama_context[chat_id].pop()
         return '!! Таймаут !!'
 
     if res.status_code != 200:
+        llama_context[chat_id].pop()
         return f'!! Апи вернул статус {res.status_code} {res.text} !!'
 
     # duration = 0.0
@@ -99,9 +102,12 @@ def reply(bot, msg, accid: int):
                 quoted_message_id=msg.id))
 
 def handle_commands(bot, accid, msg):
-    if (msg.text.startswith('/chat') or 
-           (msg.quote is not None and 
-            msg.quote.author_display_name == 'Me')):
+    if msg.quote is not None and 'author_display_name' in msg.quote and msg.quote.author_display_name == 'Me':
+        bot.rpc.markseen_msgs(accid, [msg.id])
+        reply(bot, msg, accid)
+        return
+
+    if msg.text.startswith('/chat'):
         bot.rpc.markseen_msgs(accid, [msg.id])
         reply(bot, msg, accid)
         return

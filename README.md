@@ -1,7 +1,7 @@
 # Гемморой
 
 Сетап:
-```
+```bash
 python -m venv env
 source env/bin/activate
 pip install -r requirements.txt
@@ -10,7 +10,7 @@ python main.py init dcaccount:https://tarpit.fun/new
 ```
 
 Кастомизация:
-```
+```bash
 python main.py config displayname "Гемморой 2.0"
 python main.py config selfstatus "Онет"
 python main.py config selfavatar "./avatar.png"
@@ -20,11 +20,11 @@ python main.py config delete_device_after 3600
 ```
 
 Получить ссыль на бота:
-```
+```bash
 python main.py link
 ```
 
 Запуск (ollama должен работать на порту 11434, чтобы бот отвечал без ошибок):
-```
+```bash
 python ./echobot.py serve
 ```
